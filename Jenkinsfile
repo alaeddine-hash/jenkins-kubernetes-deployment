@@ -2,6 +2,7 @@ pipeline {
   environment {
     dockerimagename = "react-app"
     dockerImage = ""
+    registryCredential = 'dockerhub-credentials'
   }
 
   agent any
@@ -23,11 +24,11 @@ pipeline {
 
     stage("Pushing Image") {
       environment {
-        registryCredential = dockerhub-credentials
+        registryCredential = 'dockerhub-credentials'
       }
       steps {
         script {
-          docker.withRegistry("https://registry.hub.docker.com", registryCredential) {
+          docker.withRegistry('https://registry.hub.docker.com', registryCredential) {
             dockerImage.push("latest")
           }
         }
@@ -37,7 +38,7 @@ pipeline {
     stage("Deploying React.js container to Kubernetes") {
       steps {
         script {
-          kubernetesDeploy(configs: "deployment.yaml", "service.yaml")
+          kubernetesDeploy(configs: ["deployment.yaml", "service.yaml"])
         }
       }
     }
