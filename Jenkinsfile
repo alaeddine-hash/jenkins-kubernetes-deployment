@@ -18,7 +18,7 @@ pipeline {
       steps {
         script {
           // Use 'docker.build' step to build the Docker image
-          dockerImage = docker.build dockerImageName
+          def dockerImage = docker.build dockerImageName
         }
       }
     }
@@ -28,8 +28,13 @@ pipeline {
         script {
           // Use 'docker.withRegistry' step to push the Docker image
           docker.withRegistry('https://registry.hub.docker.com', registryCredential) {
-            dockerImage.push("latest")
-            echo "Docker Image pushed: ${dockerImage.imageName.get()}:${dockerImage.imageTag.get()}"
+            // Retrieve the Docker image and tag it
+            def dockerImage = docker.image(dockerImageName)
+            dockerImage.tag("latest")
+
+            // Push the Docker image
+            dockerImage.push()
+            echo "Docker Image pushed: ${dockerImage.imageName()}:${dockerImage.imageTag()}"
           }
         }
       }
