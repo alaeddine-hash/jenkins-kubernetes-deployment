@@ -24,15 +24,16 @@ pipeline {
     }
 
     stage("Push Image to Registry") {
-      steps {
-        script {
-          // Use 'docker.withRegistry' step to push the Docker image
-          docker.withRegistry('https://registry.hub.docker.com', registryCredential) {
-            dockerImage.push("latest")
-          }
-        }
+  steps {
+    script {
+      docker.withRegistry('https://registry.hub.docker.com', registryCredential) {
+        dockerImage.push("latest")
+        echo "Docker Image pushed: ${dockerImage.imageName}:${dockerImage.imageTag}"
       }
     }
+  }
+}
+
 
     stage("Deploy to Kubernetes") {
       steps {
