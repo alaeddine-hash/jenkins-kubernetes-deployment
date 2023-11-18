@@ -36,11 +36,13 @@ pipeline {
     stage("Deploying React.js container to Kubernetes") {
       steps {
         script {
+          echo "Applying deployment.yaml..."
           def deploymentResult = sh(script: 'kubectl apply -f deployment.yaml', returnStatus: true)
           if (deploymentResult != 0) {
             error "Failed to apply deployment.yaml. Exit code: ${deploymentResult}"
           }
 
+          echo "Applying service.yaml..."
           def serviceResult = sh(script: 'kubectl apply -f service.yaml', returnStatus: true)
           if (serviceResult != 0) {
             error "Failed to apply service.yaml. Exit code: ${serviceResult}"
