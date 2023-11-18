@@ -1,13 +1,5 @@
 pipeline {
-    agent {
-        kubernetes {
-            cloud 'my-k8s-cloud'
-            containerTemplate {
-                // Your container configuration
-            }
-            defaultContainer 'castroup/react-app'
-        }
-    }
+    agent any
     environment {
         dockerImageName = "castroup/react-app"
         registryCredential = 'dockerhub-credentials'
