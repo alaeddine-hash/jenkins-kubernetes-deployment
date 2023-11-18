@@ -1,11 +1,18 @@
 pipeline {
+  agent {
+        kubernetes {
+            cloud 'my-k8s-cloud'
+            containerTemplate {
+                // Your container configuration
+            }
+            kubeconfigId 'your-kubeconfig-credential-id'
+        }
+    }
   environment {
     dockerImageName = "castroup/react-app"
     registryCredential = 'dockerhub-credentials'
     KUBECONFIG = '/var/lib/jenkins/.kube/config'
   }
-
-  agent any
 
   stages {
     stage("Checkout Source") {
