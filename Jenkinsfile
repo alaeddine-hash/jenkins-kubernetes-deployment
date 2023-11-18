@@ -5,7 +5,7 @@ pipeline {
             containerTemplate {
                 // Your container configuration
             }
-            defaultContainer 'your-container-name'
+            defaultContainer 'castroup/react-app'
         }
     }
     environment {
