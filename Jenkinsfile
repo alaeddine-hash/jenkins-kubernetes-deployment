@@ -22,8 +22,7 @@ pipeline {
         }
       }
     }
-
-   stage("Push Image to Registry") {
+stage("Push Image to Registry") {
   steps {
     script {
       // Use 'docker.withRegistry' step to push the Docker image
@@ -31,7 +30,7 @@ pipeline {
         // Retrieve the Docker image and tag it
         def dockerImage = docker.image(dockerImageName)
         dockerImage.push("latest")
-        echo "Docker Image pushed: ${dockerImage.imageName()}:${dockerImage.imageTag()}"
+        echo "Docker Image pushed: ${dockerImage.imageName()}:latest"
       }
     }
   }
