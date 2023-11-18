@@ -2,6 +2,7 @@ pipeline {
   environment {
     dockerImageName = "castroup/react-app"
     registryCredential = 'dockerhub-credentials'
+    KUBECONFIG = '/var/lib/jenkins/.kube/config'
   }
 
   agent any
