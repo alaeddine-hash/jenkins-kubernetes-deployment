@@ -1,7 +1,6 @@
 pipeline {
   environment {
-    dockerimagename = "react-app"
-    dockerImage = ""
+    dockerImageName = "react-app"
     registryCredential = 'dockerhub-credentials'
   }
 
@@ -10,26 +9,21 @@ pipeline {
   stages {
     stage("Checkout Source") {
       steps {
-        script {
-          // Use 'checkout' step to fetch the source code
-          checkout([$class: 'GitSCM', branches: [[name: '*/main']], userRemoteConfigs: [[url: 'https://github.com/alaeddine-hash/jenkins-kubernetes-deployment.git']]])
-        }
+        // Use 'checkout' step to fetch the source code
+        checkout([$class: 'GitSCM', branches: [[name: '*/main']], userRemoteConfigs: [[url: 'https://github.com/alaeddine-hash/jenkins-kubernetes-deployment.git']]])
       }
     }
 
     stage("Build image") {
       steps {
+        // Use 'docker.build' step to build the Docker image
         script {
-          // Use 'docker.build' step to build the Docker image
-          dockerImage = docker.build dockerimagename
+          dockerImage = docker.build dockerImageName
         }
       }
     }
 
     stage("Pushing Image") {
-      environment {
-        registryCredential = 'dockerhub-credentials'
-      }
       steps {
         script {
           // Use 'docker.withRegistry' step to push the Docker image
