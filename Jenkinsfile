@@ -23,22 +23,19 @@ pipeline {
       }
     }
 
-    stage("Push Image to Registry") {
-      steps {
-        script {
-          // Use 'docker.withRegistry' step to push the Docker image
-          docker.withRegistry('https://registry.hub.docker.com', registryCredential) {
-            // Retrieve the Docker image and tag it
-            def dockerImage = docker.image(dockerImageName)
-            dockerImage.tag("latest")
-
-            // Push the Docker image
-            dockerImage.push()
-            echo "Docker Image pushed: ${dockerImage.imageName()}:${dockerImage.imageTag()}"
-          }
-        }
+   stage("Push Image to Registry") {
+  steps {
+    script {
+      // Use 'docker.withRegistry' step to push the Docker image
+      docker.withRegistry('https://registry.hub.docker.com', registryCredential) {
+        // Retrieve the Docker image and tag it
+        def dockerImage = docker.image(dockerImageName)
+        dockerImage.push("latest")
+        echo "Docker Image pushed: ${dockerImage.imageName()}:${dockerImage.imageTag()}"
       }
     }
+  }
+}
 
     stage("Deploy to Kubernetes") {
       steps {
