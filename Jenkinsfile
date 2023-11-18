@@ -1,6 +1,6 @@
 pipeline {
   environment {
-    dockerImageName = "react-app"
+    dockerImageName = "castroup/react-app"
     registryCredential = 'dockerhub-credentials'
   }
 
