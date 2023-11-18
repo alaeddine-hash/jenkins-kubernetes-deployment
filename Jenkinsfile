@@ -9,11 +9,12 @@ pipeline {
   stages {
     stage("Checkout Source") {
       steps {
+        // Use 'checkout' step to fetch the source code
         checkout([$class: 'GitSCM', branches: [[name: '*/main']], userRemoteConfigs: [[url: 'https://github.com/alaeddine-hash/jenkins-kubernetes-deployment.git']]])
       }
     }
 
-    stage("Build image") {
+    stage("Build Image") {
       steps {
         script {
           // Use 'docker.build' step to build the Docker image
@@ -22,7 +23,7 @@ pipeline {
       }
     }
 
-    stage("Pushing Image") {
+    stage("Push Image to Registry") {
       steps {
         script {
           // Use 'docker.withRegistry' step to push the Docker image
@@ -33,7 +34,7 @@ pipeline {
       }
     }
 
-    stage("Deploying React.js container to Kubernetes") {
+    stage("Deploy to Kubernetes") {
       steps {
         script {
           echo "Applying deployment.yaml..."
