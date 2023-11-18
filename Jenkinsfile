@@ -10,13 +10,17 @@ pipeline {
   stages {
     stage("Checkout Source") {
       steps {
-        git "https://github.com/alaeddine-hash/jenkins-kubernetes-deployment.git"
+        script {
+          // Use 'checkout' step to fetch the source code
+          checkout([$class: 'GitSCM', branches: [[name: '*/main']], userRemoteConfigs: [[url: 'https://github.com/alaeddine-hash/jenkins-kubernetes-deployment.git']]])
+        }
       }
     }
 
     stage("Build image") {
       steps {
         script {
+          // Use 'docker.build' step to build the Docker image
           dockerImage = docker.build dockerimagename
         }
       }
@@ -28,6 +32,7 @@ pipeline {
       }
       steps {
         script {
+          // Use 'docker.withRegistry' step to push the Docker image
           docker.withRegistry('https://registry.hub.docker.com', registryCredential) {
             dockerImage.push("latest")
           }
@@ -38,7 +43,9 @@ pipeline {
     stage("Deploying React.js container to Kubernetes") {
       steps {
         script {
-          kubernetesDeploy(configs: ["deployment.yaml", "service.yaml"])
+          // Use 'kubectl' step to apply Kubernetes configurations
+          sh 'kubectl apply -f deployment.yaml'
+          sh 'kubectl apply -f service.yaml'
         }
       }
     }
